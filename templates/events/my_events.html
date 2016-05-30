@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+<h1>This is an event!!!</h1>
+<h2>User: {{user}}</h2>
+<br>
+<h3>Event name: {{active_events}}</h3>
+<br>
+<h3>Guests: {{guests}}</h3>
+<br>
+<h4>{{requests}}</h4>
+{% endblock %}

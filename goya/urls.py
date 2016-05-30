@@ -28,6 +28,11 @@ urlpatterns = [
     url(r'^profile/(?P<username>[\w.@+-]+)/$', 'profiles.views.profile_view', name='profile'),
     url(r'^accounts/', include('allauth.urls')),
     #url(r'^posts/$', "<appname>.views.<function_name>"),
+
+    # Events and Event Creation
+    url(r'^events/$', 'events.views.event', name='event'),
+    url(r'^create/$', 'events.views.new_event', name='new_event'),
+    url(r'^create/success$', 'events.views.create_success', name='create_success'),
 ]
 
 if settings.DEBUG:
