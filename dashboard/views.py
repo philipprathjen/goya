@@ -16,9 +16,6 @@ def dashboard(request):
 	user = request.user
 	active_events = Event.objects.filter(active=True).exclude(creator=user)
 	requested_events = EventRequest.objects.filter(guest=user)
-	for instance in requested_events:
-		print(instance.event)
-		active_events = active_events.exclude(eventrequest = instance.id)
 
 	print(requested_events)
 	user_data = {'guest': request.user}
@@ -35,6 +32,9 @@ def dashboard(request):
 				attend_request.create()
 			except:
 				attend_request.save()
+	for instance in requested_events:
+		print(instance.event)
+		active_events = active_events.exclude(eventrequest = instance.id)
 
 
 	context = {
