@@ -21,7 +21,9 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    # Dashboard and Auxiliary
     url(r'^$', 'dashboard.views.dashboard', name='landing'),
+    url(r'^about/$', 'dashboard.views.about', name='about'),
     url(r'^posts/', include("posts.urls", namespace='posts')),
     
     # Profiles and Authentication
@@ -30,9 +32,11 @@ urlpatterns = [
     #url(r'^posts/$', "<appname>.views.<function_name>"),
 
     # Events and Event Creation
-    url(r'^events/$', 'events.views.event', name='event'),
+    url(r'^my_events/$', 'events.views.my_events', name='my_events'),
     url(r'^create/$', 'events.views.new_event', name='new_event'),
     url(r'^create/success$', 'events.views.create_success', name='create_success'),
+    url(r'^(?P<slug>[\w-]+)/$', 'events.views.events_detail', name='event_detail'),
+    #url(r'(?P<id>\d+)/$', post_detail)
 ]
 
 if settings.DEBUG:

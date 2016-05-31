@@ -1,25 +1,31 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Event, EventGroup, EventRequest
+from urllib.parse import quote_plus
 
 # Authentication
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model 
-User = get_user_model()
 from profiles.models import Profile
+User = get_user_model()
 
-from .forms import EventForm
+# Event Models and Forms 
+from .models import Event, EventGroup, EventRequest
+from .forms import EventForm, AttendForm
 
 @login_required
-def event(request):
+def my_events(request):
 	user = request.user
 	active_events = Event.objects.filter(active=True, creator=user)
 	qs = EventGroup.objects.filter(event=active_events)
+	instance = active_events[0]
+	attend_form = AttendForm()
 	try: 
 		instance = qs[0]
 		guests = instance.guests.all()
 	except:
 		guests = 'No guests'
 	
+	url = instance.get_absolute_url()
+	print(url)
 	requests = EventRequest.objects.filter(event=active_events)
 	
 	context = {
@@ -27,6 +33,7 @@ def event(request):
 	'active_events': active_events,
 	'guests': guests,
 	'requests': requests,
+	'attend_form': attend_form,
 	}
 	return render(request, "events/my_events.html", context)
 
@@ -82,3 +89,15 @@ def create_success(request):
 		return render(request, "events/create_success.html", context)
 	else:
 		return render(request, "events/create_failure.html", context)
+
+def events_detail(request, slug=None):
+	instance = get_object_or_404(Event, slug=slug)
+	print(instance)
+	share_string = quote_plus(instance.name)
+	context = {
+		"name": instance.name,
+		"instance": instance,
+		"share_string": share_string,
+	}
+	return render(request, "events/events_detail.html", context)
+

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 
 {% block content %}
@@ -12,4 +13,9 @@
 <h3>Guests: {{guests}}</h3>
 <br>
 <h4>{{requests}}</h4>
+
+<form action='' method="post">
+	{% crispy attend_form %}
+</form>
+
 {% endblock %}

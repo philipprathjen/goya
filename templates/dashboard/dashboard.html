@@ -1,9 +1,35 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 
 {% block content %}
 <h1>Welcome to your landing page</h1>
 <div class='jumbotron'>
-	<h2>{{user}}</h2>
+	<h2>Welcome {{user}}</h2>
+	<h3>You may visit any of the following events</h3>
 </div>
+<div>
+	{% if active_events %}
+	<ul>
+		{% for event in active_events %}
+		<div class='row'>
+			<div class='col-sm-4'>{{event}}</div>
+			<div class='col-sm-8'>
+				<form action='' method="post">{% csrf_token %}
+					<input type='hidden' name='id' value='{{event.id}}'>
+					<input type='hidden' name='name' value='{{event}}'>
+					<input type='hidden' name='guest' value='{{user}}'>
+					<button type="submit" class="save btn btn-primary">Request Attendance</button>
+				</form>
+			</div>
+		</div>
+		
+		{% endfor %}
+	</ul>
+	{% else %}
+		<h3>Nothing going on right now. Start something yourself!</h3>
+		<p class='lead'>Learn how</p>
+	{% endif %}
+
+</div>
+
 {% endblock %}
