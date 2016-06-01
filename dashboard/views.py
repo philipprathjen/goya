@@ -17,7 +17,6 @@ def dashboard(request):
 	active_events = Event.objects.filter(active=True).exclude(creator=user)
 	requested_events = EventRequest.objects.filter(guest=user)
 
-	print(requested_events)
 	user_data = {'guest': request.user}
 	request_form = RequestForm(user_data)
 	
@@ -33,7 +32,6 @@ def dashboard(request):
 			except:
 				attend_request.save()
 	for instance in requested_events:
-		print(instance.event)
 		active_events = active_events.exclude(eventrequest = instance.id)
 
 

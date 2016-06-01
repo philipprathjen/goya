@@ -5,6 +5,8 @@ from urllib.parse import quote_plus
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model 
 from profiles.models import Profile
+from django.conf import settings
+#User = settings.AUTH_USER_MODEL
 User = get_user_model()
 
 # Event Models and Forms 
@@ -18,22 +20,65 @@ def my_events(request):
 	qs = EventGroup.objects.filter(event=active_events)
 	instance = active_events[0]
 	attend_form = AttendForm()
+	
+
 	try: 
 		instance = qs[0]
 		guests = instance.guests.all()
 	except:
 		guests = 'No guests'
 	
-	url = instance.get_absolute_url()
-	print(url)
+	#url = instance.get_absolute_url()
+	#print(url)
 	requests = EventRequest.objects.filter(event=active_events)
 	
+	my_guests = {}
+	my_requests = {}
+	for instance in active_events:
+		request_instance = EventRequest.objects.filter(event=instance)
+		guest_req = []
+		for attreq in request_instance:
+			guest_req.append(attreq.get_guest())
+		my_requests[instance] = guest_req
+	print(my_requests, type(my_requests), guests)
+
+	if request.method == 'POST':
+		attend_form = AttendForm()
+		event_id = request.POST['id']
+		event_name = request.POST['name']
+		guest = request.POST['guest']
+		if attend_form.is_valid:
+			try: 
+				event = Event.objects.filter(id=event_id)[0]
+				exist = EventGroup.objects.filter(event=event)
+			except:
+				exist = None
+			if not exist: 
+				attend_conf = EventGroup()
+				event = Event.objects.filter(id=event_id)
+				invite_user = User.objects.filter(username=guest)
+				attend_conf.event = Event.objects.filter(id=event_id)[0]
+				attend_conf.save()
+				#attend_conf.guests = User.objects.filter(username=user)			
+				user_attend = User.objects.filter(username=guest)[0]
+				attend_conf.guests.add(user_attend)
+				# try:
+				# 	attend_conf.create()
+				# except:
+				# 	attend_conf.save()
+			else: 
+				group = exist[0]
+				user_attend = User.objects.filter(username=guest)[0]
+				group.guests.add(user_attend)
+
+
 	context = {
 	'user': user,
 	'active_events': active_events,
 	'guests': guests,
 	'requests': requests,
 	'attend_form': attend_form,
+	'my_requests': my_requests,
 	}
 	return render(request, "events/my_events.html", context)
 

@@ -71,7 +71,7 @@ pre_save.connect(pre_save_event, sender = Event)
 class EventGroup(models.Model):
 	event = models.ForeignKey(Event, null = True, blank=True)
 	guests = models.ManyToManyField(User)
-
+	
 	def __str__(self):
 		return str(self.id)
 
@@ -81,3 +81,6 @@ class EventRequest(models.Model):
 
 	def __str__(self):
 		return str(self.id)
+
+	def get_guest(self):
+		return self.guest
