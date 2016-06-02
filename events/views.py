@@ -18,33 +18,6 @@ from geopy import geocoders
 
 @login_required
 def my_events(request):
-	# user = request.user
-	# active_events = Event.objects.filter(active=True, creator=user)
-	# qs = EventGroup.objects.filter(event=active_events)
-	# instance = active_events[0]
-	# attend_form = AttendForm()
-	
-
-	# try: 
-	# 	instance = qs[0]
-	# 	guests = instance.guests.all()
-	# except:
-	# 	guests = 'No guests'
-	
-	# #url = instance.get_absolute_url()
-	# #print(url)
-	# requests = EventRequest.objects.filter(event=active_events)
-	
-	# my_guests = {}
-	# my_requests = {}
-	# for instance in active_events:
-	# 	request_instance = EventRequest.objects.filter(event=instance)
-	# 	guest_req = []
-	# 	for attreq in request_instance:
-	# 		guest_req.append(attreq.get_guest())
-	# 	my_requests[instance] = guest_req
-	# print(my_requests, type(my_requests), guests)
-
 	if request.method == 'POST':
 		attend_form = AttendForm()
 		event_id = request.POST['id']
@@ -77,7 +50,12 @@ def my_events(request):
 	user = request.user
 	active_events = Event.objects.filter(active=True, creator=user)
 	qs = EventGroup.objects.filter(event=active_events)
-	instance = active_events[0]
+	try: 
+		instance = active_events[0]
+		url = instance.get_absolute_url()
+	except:
+		pass
+
 	attend_form = AttendForm()
 	
 
@@ -87,8 +65,6 @@ def my_events(request):
 	except:
 		guests = 'No guests'
 	
-	#url = instance.get_absolute_url()
-	#print(url)
 	requests = EventRequest.objects.filter(event=active_events)
 	
 	my_guests = {}
