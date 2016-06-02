@@ -8,15 +8,16 @@ User = get_user_model()
 # Event selection
 from events.models import Event, EventGroup, EventRequest
 from events.forms import EventForm, RequestForm
-
-
+# Geolocation
+from django.contrib.gis.geoip2 import GeoIP2
+from geopy import geocoders
+from ipware.ip import get_ip
 
 @login_required
 def dashboard(request):
 	user = request.user
 	active_events = Event.objects.filter(active=True).exclude(creator=user)
 	requested_events = EventRequest.objects.filter(guest=user)
-
 	user_data = {'guest': request.user}
 	request_form = RequestForm(user_data)
 	
@@ -34,11 +35,24 @@ def dashboard(request):
 	for instance in requested_events:
 		active_events = active_events.exclude(eventrequest = instance.id)
 
+	# Google Map data
+	
 
+	ip = get_ip(request)
+	if ip:
+	    try:
+	    	city = g.city(ip)['city']
+	    	geolocator = geocoders.GoogleV3()
+	    	location, (lat, lng) = geolocator.geocode(city, timeout=20)
+	    except:
+	    	lat = 48.1351
+	    	lng= 11.5820
 	context = {
 		'user': user,
 		'active_events': active_events,
 		'request_form': request_form,
+		'lat': lat,
+		'lng': lng,
 	}
 	return render(request, "dashboard/dashboard.html", context)
 

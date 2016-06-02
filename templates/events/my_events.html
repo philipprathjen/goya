@@ -10,7 +10,7 @@
 <!-- This is just example code -->
 <div>
 	{% for key, value in my_requests.items %}
-	<h3>Party name: {{key}}</h3><hr>
+	<h3>Party name: {{key.name}}</h3><hr>
 <!-- 	<h4>{{value}}</h4> -->
 		<h4>Requested permission</h4>
 		{% for guest in value %}
@@ -24,7 +24,6 @@
 					<input type='hidden' name='name' value='{{key}}'>
 					<input type='hidden' name='guest' value='{{guest}}'>
 					<button type="submit" class="save btn btn-primary">Confirm</button>
-
 				</form>
 			</div>
 		</div>

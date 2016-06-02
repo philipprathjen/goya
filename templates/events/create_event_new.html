@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>Create an Event!</h1>
+
+<form action='success' method="post">{% csrf_token %}
+		<input type='' name='creator' value=''>
+		<input type='' name='name' value=''>
+		<input type='' name='slug' value=''>
+		<input type='' name='num_people' value=''>
+		<input type='' name='' value=''>
+		<input type='' name='' value=''>
+		<input type='' name='' value=''>
+		<input type='' name='' value=''>
+		<input type='' name='' value=''>
+		<input type='' name='' value=''>
+		<input type='' name='' value=''>
+
+
+</form>
+
+{% endblock %}

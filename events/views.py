@@ -13,8 +13,67 @@ User = get_user_model()
 from .models import Event, EventGroup, EventRequest
 from .forms import EventForm, AttendForm
 
+# Geolocation
+from geopy import geocoders
+
 @login_required
 def my_events(request):
+	# user = request.user
+	# active_events = Event.objects.filter(active=True, creator=user)
+	# qs = EventGroup.objects.filter(event=active_events)
+	# instance = active_events[0]
+	# attend_form = AttendForm()
+	
+
+	# try: 
+	# 	instance = qs[0]
+	# 	guests = instance.guests.all()
+	# except:
+	# 	guests = 'No guests'
+	
+	# #url = instance.get_absolute_url()
+	# #print(url)
+	# requests = EventRequest.objects.filter(event=active_events)
+	
+	# my_guests = {}
+	# my_requests = {}
+	# for instance in active_events:
+	# 	request_instance = EventRequest.objects.filter(event=instance)
+	# 	guest_req = []
+	# 	for attreq in request_instance:
+	# 		guest_req.append(attreq.get_guest())
+	# 	my_requests[instance] = guest_req
+	# print(my_requests, type(my_requests), guests)
+
+	if request.method == 'POST':
+		attend_form = AttendForm()
+		event_id = request.POST['id']
+		event_name = request.POST['name']
+		guest = request.POST['guest']
+		if attend_form.is_valid:
+			try: 
+				event = Event.objects.filter(id=event_id)[0]
+				exist = EventGroup.objects.filter(event=event)
+			except:
+				exist = None
+			if not exist: 
+				attend_conf = EventGroup()
+				event = Event.objects.filter(id=event_id)
+				attend_conf.event = Event.objects.filter(id=event_id)[0]
+				attend_conf.save()
+				#attend_conf.guests = User.objects.filter(username=user)			
+				user_attend = User.objects.filter(username=guest)[0]
+				attend_conf.guests.add(user_attend)
+				# try:
+				# 	attend_conf.create()
+				# except:
+				# 	attend_conf.save()
+			else: 
+				group = exist[0]
+				user_attend = User.objects.filter(username=guest)[0]
+				group.guests.add(user_attend)
+		EventRequest.objects.filter(event=event, guest=user_attend).delete()
+	
 	user = request.user
 	active_events = Event.objects.filter(active=True, creator=user)
 	qs = EventGroup.objects.filter(event=active_events)
@@ -41,35 +100,6 @@ def my_events(request):
 			guest_req.append(attreq.get_guest())
 		my_requests[instance] = guest_req
 	print(my_requests, type(my_requests), guests)
-
-	if request.method == 'POST':
-		attend_form = AttendForm()
-		event_id = request.POST['id']
-		event_name = request.POST['name']
-		guest = request.POST['guest']
-		if attend_form.is_valid:
-			try: 
-				event = Event.objects.filter(id=event_id)[0]
-				exist = EventGroup.objects.filter(event=event)
-			except:
-				exist = None
-			if not exist: 
-				attend_conf = EventGroup()
-				event = Event.objects.filter(id=event_id)
-				invite_user = User.objects.filter(username=guest)
-				attend_conf.event = Event.objects.filter(id=event_id)[0]
-				attend_conf.save()
-				#attend_conf.guests = User.objects.filter(username=user)			
-				user_attend = User.objects.filter(username=guest)[0]
-				attend_conf.guests.add(user_attend)
-				# try:
-				# 	attend_conf.create()
-				# except:
-				# 	attend_conf.save()
-			else: 
-				group = exist[0]
-				user_attend = User.objects.filter(username=guest)[0]
-				group.guests.add(user_attend)
 
 
 	context = {
@@ -98,7 +128,12 @@ def create_success(request):
 		slug = request.POST['slug']
 		num_people = request.POST['num_people']
 		event_type = request.POST['event_type']
-		location = request.POST['location']
+		location_entry = str(request.POST['location'])
+		try:
+			geolocator = geocoders.GoogleV3()
+			location, (lat, lng) = geolocator.geocode(location_entry, timeout=20)
+		except:
+			location = request.POST['location']
 		max_invit = request.POST['max_invit']
 		num_girl = request.POST['num_girl']
 		num_boy = request.POST['num_boy']
@@ -123,6 +158,11 @@ def create_success(request):
 			event.cash = cash
 			event.other = other
 			event.active = active
+			try:
+				event.lat = lat
+				event.lng = lng
+			except:
+				pass
 			try:
 				event.create()
 			except:

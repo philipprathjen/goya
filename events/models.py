@@ -26,7 +26,9 @@ class Event(models.Model):
 	)
 	event_type = models.CharField(max_length = 1, choices = EVENT_TYPES)
 	location = models.CharField(max_length = 250, unique = False)
-	
+	lat = models.DecimalField(max_digits=9, decimal_places=6, default=0, blank = True)
+	lng = models.DecimalField(max_digits=9, decimal_places=6, default=0, blank = True)
+
 	# Guest list
 	max_invit = models.IntegerField(blank = False)
 	num_girl = models.IntegerField(blank = True)
@@ -71,7 +73,7 @@ pre_save.connect(pre_save_event, sender = Event)
 class EventGroup(models.Model):
 	event = models.ForeignKey(Event, null = True, blank=True)
 	guests = models.ManyToManyField(User)
-	
+
 	def __str__(self):
 		return str(self.id)
 
