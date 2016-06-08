@@ -2,10 +2,16 @@
 
 {% block content %}
 <h1>Welcome to the profile of:</h1>
-<h3>{{ profile.user }}</h3>
+<a href="{{profile.url}}">
+<img src='{{profile.picture.url}}' class="img-responsive profile_pic" style='border-radius: 50%;'/>
+</a>
+<h3>{{ profile.data }}</h3>
 <p>{{fb_data}}</p><br>
-<p><p>{{fb_friend_data}}</p></p>
-<p>{{fb_like_data}}</p>
+<p><p>{{fb_friend_data}}</p></p><br>
+<p>{{fb_like_data}}</p><br>
+<p>{{fb_event_data}}</p><br>
+<p>{{fb_context}}</p>
+
 
 
 {% endblock %}

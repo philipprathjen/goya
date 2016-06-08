@@ -1,31 +1,57 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% load staticfiles %}
 
 
 {% block content %}
-<h1>Welcome back {{user}}</h1>
+<!-- <h1>Welcome back {{user}}</h1>
+ -->
+<body>
+<div class='right-div'>
+<div class='' id="googleMap" style=""></div>
+</div>
 
-<div class='jumbotron' id="googleMap" style="height:380px;"></div><hr>
-<div>
+<div id='filter_field' class='left-div'>
+	<div class='row' style='background-color: #ddd'>
+		<div class='col-sm-3'><p class='lead'>Bar hopping</p><input type='checkbox'></div>
+		<div class='col-sm-3'><p class='lead'>Clubbing</p><input type='checkbox'></div>
+		<div class='col-sm-3'><p class='lead'>House Party</p><input type='checkbox'></div>
+		<div class='col-sm-3'><p class='lead'>Any Other</p><input type='checkbox'></div>
+	</div>
+	<hr>
+	<p class='lead'>Entourage</p>
+	<div class='row'>
+		<div class='col-sm-3'><pre>Totally New</pre></div>
+		<div class='col-sm-6'>
+			<form>
+			<input type="range" id="myRange" value="90">
+			</form>
+		</div>
+		<div class='col-sm-3'>
+			<pre>Outer circle</pre></div>
+	</div>
+</div>
+
+<div id='background_elements' class='container_low'><br>
+
 	{% if active_events %}
 	<ul>
 		{% for event in active_events %}
-		<div class='row'>
-			<div class='col-sm-10'>
+		<div id='element' class='row'>
+			<div class='col-sm-8'>
 				<h4>{{ event.name }}</h4>
 				<p>Bring your own: {{event.byo}}</p>
 				<p>Location: {{event.location}}</p>
 			</div>
-			<div class='col-sm-2'>
+			<div class='col-sm-4'><br><br>
 				<form action='' method="post">{% csrf_token %}
 					<input type='hidden' name='id' value='{{event.id}}'>
 					<input type='hidden' name='name' value='{{event}}'>
 					<input type='hidden' name='guest' value='{{user}}'>
-					<button type="submit" class="save btn btn-primary">Request Attendance</button>
+					<button type="submit" class="save btn-success">Request Attendance</button>
 				</form>
 			</div>
-		</div>	
+		</div><br>
 		{% endfor %}
 	</ul>
 	{% else %}
@@ -36,3 +62,13 @@
 </div>
 
 {% endblock %}
+</body>
+<style>
+{%block style %}
+body{
+	background-color: black;
+}
+
+
+{% endblock %}
+</style>

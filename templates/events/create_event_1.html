@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>Create an Event!</h1>
+
+<form action='success' method="post">{% csrf_token %}
+		{% crispy new_event_form %}
+</form>
+
+{% endblock %}

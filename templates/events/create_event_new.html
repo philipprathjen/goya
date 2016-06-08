@@ -4,22 +4,32 @@
 
 
 {% block content %}
-<h1>Create an Event!</h1>
+<h1>Create an Event! D</h1>
 
 <form action='success' method="post">{% csrf_token %}
-		<input type='' name='creator' value=''>
-		<input type='' name='name' value=''>
-		<input type='' name='slug' value=''>
+		<input type='hidden' name='creator' value='creator'>
+		<input type='' name='name' value='' placeholder='Anything you want here'>
+		<input type='hidden' name='slug' value=''>
 		<input type='' name='num_people' value=''>
-		<input type='' name='' value=''>
-		<input type='' name='' value=''>
-		<input type='' name='' value=''>
-		<input type='' name='' value=''>
-		<input type='' name='' value=''>
-		<input type='' name='' value=''>
-		<input type='' name='' value=''>
+		<select name='event_type'>
+		  <option value="B">Bar</option>
+		  <option value="H">House Party</option>
+		  <option value="C">Clubbing</option>
+		  <option value="O">Other</option>
+		</select>
 
-
+		<input type='text' name='Location' value=''>
+		<input type='hidden' name='lat' value=''>
+		<input type='hidden' name='lng' value=''>
+		<input type='number' name='max_invit' value=''>
+		<input type='number' name='num_girl' value=''>
+		<input type='number' name='num_boy' value=''>
+		<input type='number' name='sp_score_req' value=''>
+		<input type='button' name='byo' value=''>
+		<input type='number' name='cash' value=''>
+		<input type='text' name='other' value=''>
+		<input type='hidden' name='active' value='true'>
+		<button type="submit" class="save btn btn-primary">Confirm</button>
 </form>
 
 {% endblock %}

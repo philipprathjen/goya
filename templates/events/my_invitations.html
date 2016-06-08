@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>You were invited to the following events</h1>
+
+{% for event in events%}
+<h3>{{event}}</h3>
+{% endfor %}
+
+<div>
+<footer class="footer">
+	<div class="container">
+ 	<p class='lead'>You are logged in as: {{user}}</p>
+	</div>
+</footer>
+</div>
+
+{% endblock %}

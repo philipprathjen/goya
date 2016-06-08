@@ -88,10 +88,40 @@ def my_events(request):
 	}
 	return render(request, "events/my_events.html", context)
 
+
+def my_invitations(request):
+	user = request.user
+	event_invitations = EventGroup.objects.all()
+	qs_events=[]
+	for event in event_invitations:
+		elem= Event.objects.filter(eventgroup=event)[0]
+		qs_events.append(elem)
+	events=[]
+	for i in range(0,len(qs_events)):
+		instance = qs_events[i]
+		print(instance, instance.name)
+		events.append(instance.name)
+
+
+	# try: 
+	# 	instance = qs
+	# 	events = instance.events.all()
+	# except:
+	# 	events = 'No Invitations'
+
+	context = {
+	'user': user,
+	'events': events
+	}
+	return render(request, "events/my_invitations.html", context)
+
+
 def new_event(request):
 	user_data = {'creator': request.user}
+	creator = request.user
 	new_event_form=EventForm(user_data)
 	context = {
+	'creator': creator, 
 	'new_event_form': new_event_form,
 	}
 	return render(request, "events/create_event.html", context)

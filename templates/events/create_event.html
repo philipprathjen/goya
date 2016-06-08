@@ -7,7 +7,29 @@
 <h1>Create an Event!</h1>
 
 <form action='success' method="post">{% csrf_token %}
-		{% crispy new_event_form %}
+		<input type='hidden' name='creator' value='creator'>
+		<p>Event Name:<input type='' name='name' value='' placeholder='Anything you want here'></p><br>
+		<input type='hidden' name='slug' value=''>
+		Number of people: <input type='number' name='num_people' value='' placeholder='People there now?'><br>
+		Type of Event: <select name='event_type'>
+		  <option value="B">Bar</option>
+		  <option value="H">House Party</option>
+		  <option value="C">Clubbing</option>
+		  <option value="O">Other</option>
+		</select><br>
+
+		Location: <input type='text' name='location' value=''><br>
+		<input type='hidden' name='lat' value=''>
+		<input type='hidden' name='lng' value=''>
+		People: <input type='number' name='max_invit' value='' placeholder='Invite how many?'><br>
+		Invite Girls: <input type='number' name='num_girl' value='' placeholder='Specify how many gals?'>
+		Invite Boys: <input type='number' name='num_boy' value='' placeholder='How many boys?'>
+		Choose the social proximity: <input type='number' name='sp_score_req' value=''><br>
+		Bring your own drinks?<input type='checkbox' name='byo' value='true'>
+		Should people bring cash?<input type='number' name='cash' value=''><br>
+		Anything else? <input type='text' name='other' value='' placeholder='Gryffindor Theme'>
+		<input type='hidden' name='active' value='true'>
+		<button type="submit" class="save btn btn-primary">Confirm</button>
 </form>
 
 {% endblock %}

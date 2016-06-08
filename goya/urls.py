@@ -33,6 +33,7 @@ urlpatterns = [
 
     # Events and Event Creation
     url(r'^my_events/$', 'events.views.my_events', name='my_events'),
+    url(r'^invitations/$', 'events.views.my_invitations', name='my_invitations'),
     url(r'^create/$', 'events.views.new_event', name='new_event'),
     url(r'^create/success$', 'events.views.create_success', name='create_success'),
     url(r'^(?P<slug>[\w-]+)/$', 'events.views.events_detail', name='event_detail'),

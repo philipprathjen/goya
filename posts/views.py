@@ -45,12 +45,11 @@ def post_detail(request, slug=None):
 from allauth.socialaccount.models import SocialAccount, SocialToken
 def post_list(request):
 	fball = SocialAccount.objects.filter(provider = 'facebook')
-	fbid = SocialAccount.objects.filter(
-		user=request.user, 
-		provider = 'facebook').first()
+	fbid = SocialAccount.objects.filter(user=request.user, provider = 'facebook').first()
 	social_token = SocialToken.objects.filter(
 		account__user = request.user, 
 		account__provider = 'facebook').first()
+	print(fbid)
 	uid = fbid.uid
 	token = social_token.token
 

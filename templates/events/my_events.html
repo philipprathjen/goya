@@ -4,8 +4,8 @@
 
 
 {% block content %}
+
 <h1>Manage your parties here:</h1>
-<h2>User: {{user}}</h2>
 
 <!-- This is just example code -->
 <div>
@@ -31,6 +31,14 @@
 	{% endfor %}
 
 <!-- {{my_requests.Event}} -->
+</div>
+
+<div>
+<footer class="footer">
+	<div class="container">
+ 	<p class='lead'>You are logged in as: {{user}}</p>
+	</div>
+</footer>
 </div>
 
 
