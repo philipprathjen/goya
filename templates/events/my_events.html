@@ -4,21 +4,32 @@
 
 
 {% block content %}
-
-<h1>Manage your parties here:</h1>
-
+<div class='row'>
+<h1>Your upcoming:</h1>
+</div>
 <!-- This is just example code -->
-<div>
-	{% for key, value in my_requests.items %}
+<div class='row'>
+	<div>
+	{% for key, value in my_guests.items %}
 	<h3>Party name: {{key.name}}</h3><hr>
-<!-- 	<h4>{{value}}</h4> -->
-		<h4>Requested permission</h4>
-		{% for guest in value %}
 		<div class='row'>
 			<div class='col-sm-6'>
-				<p class='lead'>{{guest}}</p>
+				<h4>Requested permission</h4>
 			</div>
 			<div class='col-sm-6'>
+				<h4>Attending Event</h4>
+			</div>
+		<div class='row'>
+		{% for guest in value.requests %}
+			<div class='col-sm-3'>
+				<center>
+				<a href="{{guest.get_absolute_url}}">
+				<img src='{{guest.picture.url}}' class="img-responsive profile_pic" style='border-radius: 50%;'/>
+				<p>{{guest.user}}</p>
+				</a>
+				</center>
+			</div>
+			<div class='col-sm-3'>
 				<form action='' method="post">{% csrf_token %}
 					<input type='hidden' name='id' value='{{key.id}}'>
 					<input type='hidden' name='name' value='{{key}}'>
@@ -26,9 +37,22 @@
 					<button type="submit" class="save btn btn-primary">Confirm</button>
 				</form>
 			</div>
-		</div>
 		{% endfor %}
+		{% if not value.requests %}
+		<div class='col-sm-6'></div>
+		{% endif %}
+		{% for guest in value.attending %}
+			<div class='col-sm-6'>
+				<a href="{{guest.get_absolute_url}}">
+				<img src='{{guest.picture.url}}' class="img-responsive profile_pic" style='border-radius: 50%;'/>
+				<p>{{guest.user}}</p>
+				</a>
+			</div>
+		{% endfor %}
+		</div>
+		</div>
 	{% endfor %}
+	</div>
 
 <!-- {{my_requests.Event}} -->
 </div>
@@ -40,7 +64,6 @@
 	</div>
 </footer>
 </div>
-
 
 
 

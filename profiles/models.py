@@ -21,6 +21,11 @@ class Job(models.Model):
 	def __str__(self):
 		return self.name
 
+class Place(models.Model):
+	fb_id = models.CharField(max_length = 120, null=True, blank=True)
+	name = models.CharField(max_length = 120, null=True, blank=True)
+	def __str__(self):
+		return self.name
 
 class Profile(models.Model):
 	user = models.OneToOneField(User)
@@ -31,7 +36,7 @@ class Profile(models.Model):
 	jobs = models.ManyToManyField(Job)
 	schools = models.ManyToManyField(School)
 	birthday = models.DateField(blank=True, null=True)
-	# places = models.ManyToManyField(Place)
+	places = models.ManyToManyField(Place)
 	# likes = models.ManyToManyField(UserLike)
 
 	
@@ -50,11 +55,6 @@ class Profile(models.Model):
 
 
 
-
-
-# class Place(models.Model):
-# 	fb_id = models.CharField(max_length = 120, null=True, blank=True)
-# 	name = models.CharField(max_length = 120, null=True, blank=True)
 
 # class UserLike(models.Model):
 # 	fb_id = models.CharField(max_length = 120, null=True, blank=True)

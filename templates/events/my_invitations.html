@@ -4,11 +4,13 @@
 
 
 {% block content %}
-<h1>You were invited to the following events</h1>
+<h1>Congratulations! You're invited: </h1><br>
 
+<ol>
 {% for event in events%}
-<h3>{{event}}</h3>
+<h4><li>{{event}}</li></h4>
 {% endfor %}
+</ol>
 
 <div>
 <footer class="footer">

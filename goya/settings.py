@@ -177,7 +177,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 SOCIALACCOUNT_PROVIDERS = \
     {'facebook':
        {'METHOD': 'oauth2',
-        'SCOPE': ['email', 'public_profile', 'user_friends','user_birthday', 'user_education_history', 'user_work_history', 'user_interests', 'user_likes', 'user_relationship_details', 'user_activities', 'user_events'],
+        'SCOPE': ['email', 'public_profile', 'user_friends','user_birthday', 'user_education_history', 'user_work_history', 'user_interests', 'user_likes', 'user_relationship_details', 'user_activities', 'user_events', 'user_location', 'user_hometown'],
         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
         'FIELDS': [
             'id',

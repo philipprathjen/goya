@@ -18,6 +18,7 @@ from geopy import geocoders
 
 @login_required
 def my_events(request):
+	user = request.user
 	if request.method == 'POST':
 		attend_form = AttendForm()
 		event_id = request.POST['id']
@@ -37,17 +38,15 @@ def my_events(request):
 				#attend_conf.guests = User.objects.filter(username=user)			
 				user_attend = User.objects.filter(username=guest)[0]
 				attend_conf.guests.add(user_attend)
-				# try:
-				# 	attend_conf.create()
-				# except:
-				# 	attend_conf.save()
+
 			else: 
 				group = exist[0]
 				user_attend = User.objects.filter(username=guest)[0]
 				group.guests.add(user_attend)
-		EventRequest.objects.filter(event=event, guest=user_attend).delete()
+			
+			EventRequest.objects.filter(event=event, guest=user_attend).delete()
 	
-	user = request.user
+
 	active_events = Event.objects.filter(active=True, creator=user)
 	qs = EventGroup.objects.filter(event=active_events)
 	try: 
@@ -58,33 +57,40 @@ def my_events(request):
 
 	attend_form = AttendForm()
 	
-
-	try: 
-		instance = qs[0]
-		guests = instance.guests.all()
-	except:
-		guests = 'No guests'
-	
-	requests = EventRequest.objects.filter(event=active_events)
-	
 	my_guests = {}
-	my_requests = {}
 	for instance in active_events:
-		request_instance = EventRequest.objects.filter(event=instance)
-		guest_req = []
-		for attreq in request_instance:
-			guest_req.append(attreq.get_guest())
-		my_requests[instance] = guest_req
-	print(my_requests, type(my_requests), guests)
+		try:
+			request_instance = EventRequest.objects.filter(event=instance)
+			guest_req = []
+			for attreq in request_instance:
+				elem = attreq.get_guest()
+				print(elem)
+				visitor = Profile.objects.get(user=elem)
+				print(visitor, type(visitor))
+				guest_req.append(visitor)
+			my_guests[instance] = {'requests': guest_req} 
+		except:
+			pass
 
+	#### Show attending guests
+	for instance in active_events:
+		try:
+			guest_list = []
+			attending = EventGroup.objects.get(event=instance)
+			print('This is attending: ', attending)
+			guests_qs = attending.guests.all()
+			for user_elem in guests_qs:
+				visitor = Profile.objects.get(user=user_elem)
+				guest_list.append(visitor)
+			my_guests[instance] = {'attending': guest_list}
+		except:
+			pass		
 
 	context = {
 	'user': user,
 	'active_events': active_events,
-	'guests': guests,
-	'requests': requests,
 	'attend_form': attend_form,
-	'my_requests': my_requests,
+	'my_guests': my_guests,
 	}
 	return render(request, "events/my_events.html", context)
 
