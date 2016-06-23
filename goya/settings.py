@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'dashboard',
     'profiles',
     'events',
+    'venues'
 ]
 
 SITE_ID = 1

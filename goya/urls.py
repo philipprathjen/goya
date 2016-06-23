@@ -38,6 +38,9 @@ urlpatterns = [
     url(r'^create/success$', 'events.views.create_success', name='create_success'),
     url(r'^(?P<slug>[\w-]+)/$', 'events.views.events_detail', name='event_detail'),
     #url(r'(?P<id>\d+)/$', post_detail)
+
+    # Venues
+   url(r'^venue/(?P<slug>[\w-]+)/$', 'venues.views.venue', name='venue'),
 ]
 
 if settings.DEBUG:
