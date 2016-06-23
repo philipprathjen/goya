@@ -20,7 +20,7 @@ from allauth.socialaccount.models import SocialAccount, SocialToken
 User = get_user_model()
 
 #Profile data
-from .models import School, Job, Place
+from .models import School, Job, Place, UserLike, FbEvent, Match
 
 def update_fb_data(username):
 	user = get_object_or_404(User, username=username)
@@ -55,6 +55,8 @@ def update_fb_data(username):
 			#item = Profile(user_profile)
 			item.picture = "/static/img/profile_pics/%s.jpg" %(fb_data['id'])
 			item.save()
+		else:
+			item.picture = "/static/img/profile_pics/profile_default.png"
 
 		### Get and Save Birthday
 		birthday = fb_data['birthday']
@@ -67,7 +69,6 @@ def update_fb_data(username):
 		if profile.birthday != bday:
 			profile.birthday = bday
 			profile.save()
-
 
 		### Get and Save Education
 		education = fb_data['education']
@@ -107,9 +108,6 @@ def update_fb_data(username):
 		item.save()
 	except:
 		pass
-
-
-
 	return fb_data
 
 def update_friend_data(username):
@@ -157,12 +155,60 @@ def update_like_data(username):
 			fb_uid = uid)
 		plus_token = "{basic_info}&access_token={token}".format(basic_info = basic_info, token=token)
 		fb_like_data = requests.get(plus_token).json()
-		print(fb_like_data)
 
+		pager = fb_like_data['paging']['next']
+		like_dict = fb_like_data['data']
+
+		try: 
+			pos = pager.find('after')
+			pager = pager[:pos] + "after="
+			print(pager) 
+		except:
+			pass
+
+		before = fb_like_data['paging']['cursors']['before']
+		after = fb_like_data['paging']['cursors']['after']
+		while before:
+			next_page= pager + before
+			new_data = requests.get(next_page).json()
+			like_list = new_data['data']
+			for elem in like_list:
+				like_dict.append(elem)
+			try:
+				before = new_data['paging']['cursors']['before']
+			except:
+				before=None
+
+		while after:
+			next_page= pager + after
+			new_data = requests.get(next_page).json()
+			like_list = new_data['data']
+			for elem in like_list:
+				like_dict.append(elem)
+			try:
+				after = new_data['paging']['cursors']['after']
+			except:
+				after=None
+		try:
+			likes={}
+			for elem in like_dict:
+				try: 
+					like_name=str(elem['name'])
+					like_id=str(elem['id'])			
+					likes[like_name]=like_id
+					item, created = UserLike.objects.get_or_create(fb_id = like_id)
+					item.name = like_name
+					item.save()
+					profile.likes.add(item)
+				except:
+					pass
+			print(likes, len(likes))
+		except:
+			pass
 	except:
-		fb_like_data = None
+		likes = None
 		pass
-	return fb_like_data
+	return likes
 
 def update_event_data(username):
 	user = get_object_or_404(User, username=username)
@@ -183,41 +229,140 @@ def update_event_data(username):
 			fb_uid = uid)
 		plus_token = "{basic_info}&access_token={token}".format(basic_info = basic_info, token=token)
 		fb_event_data = requests.get(plus_token).json()
-		print('Events:', fb_event_data)
 
-	except:
-		fb_event_data = None
-		pass
-	return fb_event_data
+		pager = fb_event_data['paging']['next']
+		event_dict = fb_event_data['data']
 
-def update_context_data(username):
-	user = get_object_or_404(User, username=username)
-	profile, created = Profile.objects.get_or_create(user=user)
-	try: 
-		fball = SocialAccount.objects.filter(provider = 'facebook')
-		fbid = SocialAccount.objects.filter(
-			user=user, 
-			provider = 'facebook').first()
-		print('First, this is it: ', fbid)
-		social_token = SocialToken.objects.filter(
-			account__user = user, 
-			account__provider = 'facebook').first()
-		uid = fbid.uid
-		print('Does this work: ', uid)
-		token = social_token.token
-		print(social_token)
-		base_url = 'https://graph.facebook.com/v2.6/'
-		print(base_url)
-		basic_info = "{base_url}{fb_uid}?fields=context&format=json".format(
-			base_url = base_url,
-			fb_uid = uid)
-		print(basic_info)
-		plus_token = "{basic_info}&access_token={token}".format(basic_info = basic_info, token=token)
-		fb_context = requests.get(plus_token).json()
-		print(fb_context.status_code)
-		print(fb_context.json())
+		try: 
+			pos = pager.find('after')
+			pager = pager[:pos] + "after="
+			print(pager) 
+		except:
+			pass
+
+		before = fb_event_data['paging']['cursors']['before']
+		after = fb_event_data['paging']['cursors']['after']
+		while before:
+			next_page= pager + before
+			new_data = requests.get(next_page).json()
+			event_list = new_data['data']
+			for elem in event_list:
+				event_dict.append(elem)
+			try:
+				before = new_data['paging']['cursors']['before']
+			except:
+				before=None
+
+		while after:
+			next_page= pager + after
+			new_data = requests.get(next_page).json()
+			event_list = new_data['data']
+			for elem in event_list:
+				event_dict.append(elem)
+			try:
+				after = new_data['paging']['cursors']['after']
+			except:
+				after=None
+		try:
+			events={}
+			for elem in event_dict:
+				try: 
+					event_name=str(elem['name'])
+					event_id=str(elem['id'])			
+					events[event_name]=event_id
+					item, created = FbEvent.objects.get_or_create(fb_id = event_id)
+					item.name = event_name
+					item.save()
+					profile.events.add(item)
+				except:
+					pass
+			print(events, len(likes))
+		except:
+			pass
 	except:
-		fb_context = None
-		print('Epic fail')
+		events = None
 		pass
-	return fb_context
+
+	return events
+
+
+def get_matches(username):
+	user_a = get_object_or_404(User, username=username)
+	print('This is the user:', user_a)
+	user_profile = Profile.objects.get(user = user_a)
+	print('This is the user profile: ', user_profile)
+	print(user_profile)
+	queryset = Profile.objects.all()
+	print(queryset)
+	qset_likes_a = user_profile.likes.all()
+	qset_events_a = user_profile.events.all()
+	for profile in queryset:
+		user_b = profile.user
+		print(user_a, user_b)
+		
+		##### Common Likes
+		qset_likes_b = profile.likes.all()
+		print(type(qset_likes_a), type(qset_likes_b))
+		set_likes_a = []
+		for elem in qset_likes_a:
+			set_likes_a.append(elem)
+		set_likes_b = []
+		for elem in qset_likes_b:
+			set_likes_b.append(elem)
+		common_likes = set(set_likes_a).intersection(set_likes_b)
+
+		### Common Events
+		qset_events_b = profile.events.all()
+		set_events_a = []
+		for elem in qset_events_a:
+			set_events_a.append(elem)
+		set_events_b = []
+		for elem in qset_events_b:
+			set_events_b.append(elem)
+		common_events = set(set_events_a).intersection(set_events_b)
+		print(common_events)
+
+		##### Common Places
+
+		##### Common Employer
+
+		##### Common School
+		
+		##### Facebook Friends
+		### Remember to add this to model directly
+
+
+		##### Age difference
+
+
+		##### Educational level
+
+
+		
+
+
+		##### Temporary Matching Algorithm:
+		matching_score = len(common_likes) + len(common_events)
+		print('This is the matching score: ', matching_score)
+
+
+		##### Saving the match
+		print('starting save')
+		if user_a != user_b:
+			item, created = Match.objects.get_or_create(user_a = user_a, user_b = user_b)
+			print('got match from database')
+			print('assigned the users')
+			item.match_decimal = matching_score
+			print('assigned matching_score')
+			item.save()
+			print('Done')
+		else:
+			pass
+
+	return 'Matching Algorithm Complete'
+
+# def social_score(username):
+
+
+
+

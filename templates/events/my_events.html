@@ -23,8 +23,10 @@
 		{% for guest in value.requests %}
 			<div class='col-sm-3'>
 				<center>
+				{% if guest.picture %}
 				<a href="{{guest.get_absolute_url}}">
 				<img src='{{guest.picture.url}}' class="img-responsive profile_pic" style='border-radius: 50%;'/>
+				{% endif %}
 				<p>{{guest.user}}</p>
 				</a>
 				</center>
@@ -43,8 +45,10 @@
 		{% endif %}
 		{% for guest in value.attending %}
 			<div class='col-sm-6'>
+				{% if guest.picture %}
 				<a href="{{guest.get_absolute_url}}">
 				<img src='{{guest.picture.url}}' class="img-responsive profile_pic" style='border-radius: 50%;'/>
+				{% endif %}
 				<p>{{guest.user}}</p>
 				</a>
 			</div>

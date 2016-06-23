@@ -26,18 +26,28 @@ class Place(models.Model):
 	name = models.CharField(max_length = 120, null=True, blank=True)
 	def __str__(self):
 		return self.name
+class FbEvent(models.Model):
+	fb_id = models.CharField(max_length = 120, null=True, blank=True)
+	name = models.CharField(max_length = 200, null=True, blank=True)
+	def __str__(self):
+		return self.name
+class UserLike(models.Model):
+	fb_id = models.CharField(max_length = 120, null=True, blank=True)
+	name = models.CharField(max_length = 200, null=True, blank=True)
+	def __str__(self):
+		return self.name
 
 class Profile(models.Model):
 	user = models.OneToOneField(User)
 		# OneToOneField any user can only have one profile. Kind of a unique clause
 	location = models.CharField(max_length = 120, null=True, blank=True)
 	picture = models.ImageField(upload_to='static/img/profile_pics/', null=True, blank = True)
-	# events = models.ManyToManyField(Event)
-	jobs = models.ManyToManyField(Job)
-	schools = models.ManyToManyField(School)
+	events = models.ManyToManyField(FbEvent, blank=True)
+	jobs = models.ManyToManyField(Job, blank=True)
+	schools = models.ManyToManyField(School, blank=True)
 	birthday = models.DateField(blank=True, null=True)
-	places = models.ManyToManyField(Place)
-	# likes = models.ManyToManyField(UserLike)
+	places = models.ManyToManyField(Place, blank=True)
+	likes = models.ManyToManyField(UserLike, blank=True)
 
 	
 	def __str__(self):
@@ -48,14 +58,15 @@ class Profile(models.Model):
 		#This actually gives us the URL
 		return url
 
-# class Event(models.Model):
-# 	fb_id = models.CharField(max_length = 120, null=True, blank=True)
-# 	name = models.CharField(max_length = 120, null=True, blank=True)
+class Match(models.Model):
+	user_a = models.ForeignKey(User, related_name= 'match_user_a')
+	user_b = models.ForeignKey(User, related_name= 'match_user_b')
+	fb_match = models.BooleanField(default = False)
+	match_decimal = models.DecimalField(decimal_places=8, max_digits=16, default=0.00)
+	timestamp = models.DateTimeField(auto_now_add = True, auto_now = False)
+	updated = models.DateTimeField(auto_now_add = False, auto_now = True)
+
+	def __str__(self):
+		return "%s-%s" %(self.user_a, self.user_b)
 
 
-
-
-
-# class UserLike(models.Model):
-# 	fb_id = models.CharField(max_length = 120, null=True, blank=True)
-# 	name = models.CharField(max_length = 120, null=True, blank=True)

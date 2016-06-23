@@ -22,7 +22,7 @@ from django.contrib.auth import get_user_model
 from allauth.socialaccount.models import SocialAccount, SocialToken
 User = get_user_model()
 
-from .utils import update_fb_data, update_friend_data, update_like_data, update_event_data, update_context_data
+from .utils import update_fb_data, update_friend_data, update_like_data, update_event_data, get_matches
 
 
 @login_required
@@ -31,18 +31,31 @@ def profile_view(request, username):
 	user = get_object_or_404(User, username=username)
 	print(user)
 	profile, created = Profile.objects.get_or_create(user=user)
-	fb_data=None
-	fb_friend_data=None
-	fb_like_data=None
-	fb_event_data=None
-	fb_context=None
+	
+	
+	
 	#### Facebook data stuff
+	try:
+		fb_data = update_fb_data(username)
+	except:
+		fb_data=None
+	try:
+		fb_friend_data = update_friend_data(username)
+	except:
+		fb_friend_data=None
+	try:
+		fb_like_data = update_like_data(username)
+	except:
+		fb_like_data=None
+	try:	
+		fb_event_data = update_event_data(username)
+	except:
+		fb_event_data=None
+	try:
+		matches = get_matches(username)
+	except:
+		matches = None
 
-	fb_data = update_fb_data(username)
-	fb_friend_data = update_friend_data(username)
-	fb_like_data = update_like_data(username)
-	fb_event_data = update_event_data(username)
-	fb_context = update_context_data(username)
 
 	context = {
 		'profile': profile,
@@ -50,7 +63,7 @@ def profile_view(request, username):
 		'fb_friend_data': fb_friend_data,
 		'fb_like_data': fb_like_data,
 		'fb_event_data': fb_event_data,
-		'fb_context': fb_context,
+		'matches': matches,
 		}
 
 	return render(request, 'profiles/profile_view.html', context)
