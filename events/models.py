@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models.signals import post_save, pre_save 
 # pre_save will do sth prior to being saved. Right before the model is saved we're going to do something. 
-
+from venues.models import Venue
 
 # Create your models here.
 
@@ -28,6 +28,9 @@ class Event(models.Model):
 	location = models.CharField(max_length = 250, unique = False)
 	lat = models.DecimalField(max_digits=9, decimal_places=6, default=0, blank = True)
 	lng = models.DecimalField(max_digits=9, decimal_places=6, default=0, blank = True)
+	
+	# Venue
+	venue = models.ManyToManyField(Venue, blank=True)
 
 	# Guest list
 	max_invit = models.IntegerField(blank = False)

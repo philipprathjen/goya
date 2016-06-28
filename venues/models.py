@@ -10,6 +10,7 @@ class Venue(models.Model):
 	name = models.CharField(max_length = 120, unique=True)
 	slug = models.SlugField(unique=True, blank = True)
 	rating = models.DecimalField(max_digits=9, decimal_places=6, blank = True)
+	picture = models.ImageField(upload_to='static/img/venue_images/', null=True, blank = True)
 	SPIRIT_TYPES = (
 		('A', 'Alternative'),
 		('B', 'Hipster'),
