@@ -1,7 +1,6 @@
 body {
   min-height: 800px;
-  /*background-color: #ddf3fb;*/
-  position: absolute;
+  background-color: #ddf3fb;
   height: 100%;
   width: 100%;
   margin: 0;
@@ -9,16 +8,25 @@ body {
 
 
 .navbar-static-top {
-  margin-bottom: 100px;
-  background-color: black;
-  border-color: black;
+  background-color: #ADD8E6;
+  border-color: lightgrey;
   color: white;
+  height: 20px;
+
 }
 .navbar {
     margin-bottom: 2px;
     position: fixed;
     width: 100%;
 }
+.navbar-brand{
+  position: relative;
+  top: -5px;
+}
+.navbar-default .navbar-nav>li>a{
+  color:black;
+}
+
 .navbar.center .navbar-inner {
     text-align: center;
 }
@@ -47,16 +55,16 @@ body {
 }
 
 .navbar-toggle {
-	background-color: #0E3D14 !important;
+	background-color: black !important;
 }
 
 .navbar-nav li a {
-	line-height: 70px;
-	height: 70px;
+	line-height: 50px;
+	height: 20px;
     padding-top: 0;
-    background-color: black;
-    border-bottom-color: black; 
+    background-color: #ADD8E6;
+    border-bottom-color: #ADD8E6; 
     color: white;
-    outline-color: black;
+    outline-color: #ADD8E6;
     padding: 
 }

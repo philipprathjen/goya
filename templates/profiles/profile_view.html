@@ -1,18 +1,112 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
-<h1>Welcome to the profile of:</h1>
-{% if profile.url %}
-<a href="{{profile.url}}">
-<img src='{{profile.picture.url}}' class="img-responsive profile_pic" style='border-radius: 50%;'/>
-</a>
-{% endif %}
+
+<div class='row'>
+	<div class="col-sm-6 col-md-4 col-lg-4 col-xl-4">	 
+		<div id="userbar">
+			<div id="compOne">
+				{% if profile.picture.url %}
+				<div>
+				<a href="{{profile.url}}">
+					<img src='{{profile.picture.url}}' class="img-responsive profile_pic" id="profileImage"/>
+				</a>
+				</div>
+				{% endif %}
+				
+				{% if request.user == profile.user%}
+				<div id="editProfile">
+					<button type="button" class="btn btn-primary">Edit</button>
+				</div>
+				{% endif %}
+			</div>
+
+			<div id="userFacts">
+				<div id="fbConnect">
+					<img src="http://static1.squarespace.com/static/5394d381e4b0902ebea38941/t/53950ae6e4b0d0ce554411c0/1402276583565/FBicon.png" height="60px">
+				</div>
+				<h4>Contact Information</h4>
+				<hr>
+				<table id="contactTable">
+				  <tr>
+				    <th>Username</th>
+				    <th>{{profile.user}}</th> 
+				  </tr>
+				  <tr>
+				    <th>Phone</th>
+				    <th>+49-xxx-xxxx</th> 
+				  </tr>
+				  <tr>
+				    <th>Email</th>
+				    <th>example@myemail.com</th> 
+				  </tr>
+				</table>
+				{% if request.user == profile.user%}
+				{% else %}
+				<div id="goyaScore">
+				<center>
+				<p id="userMatch">In Common</p>
+				<img id="goyaImg" src="{% static 'img/coyo.png' %}" height="30" width="30" >
+				<img id="goyaImg" src="{% static 'img/coyo.png' %}" height="30" width="30" >
+				<img id="goyaImg" src="{% static 'img/coyo.png' %}" height="30" width="30" >
+				<img id="goyaImg" src="{% static 'img/coyo.png' %}" height="30" width="30" >
+				<img id="" src="{% static 'img/coyo.png' %}" height="30" width="30" >
+				<img id="" src="{% static 'img/coyo.png' %}" height="30" width="30" >
+				</center>
+				</div>	
+				{% endif %}	
+			
+			</div>
+		</div>
+		
+
+	</div>
+	<div class="col-sm-6 col-md-8 col-lg-8 col-xl-8">
+		<div id="userinfo">
+			<div id="compOne">
+				<div id="userBio">
+					<p id="bioTitle">This is a biography</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis quam dignissim lacus finibus, ac sagittis lorem laoreet. Sed nec tincidunt lectus, ac malesuada odio. Nullam ac imperdiet odio. Cras dapibus lorem sit amet augue gravida, et tincidunt libero placerat. Fusce quis commodo mauris, porttitor commodo augue. Morbi ac ultricies enim. Phasellus luctus iaculis dolor, ut volutpat velit bibendum sed. Morbi maximus, nisl a ultrices egestas, tellus neque mattis ipsum, ut fringilla nisi orci nec augue.</p>
+				</div>
+
+			</div>
+
+			<div id="userFacts">
+				<h4>Education</h4>
+				{% for school in profile.schools.all %}
+				<p>{{school }}</p>
+				{% endfor %}
+			</div>
+			<div id="userFacts">
+				<h4>Places</h4>
+				{% for place in profile.places.all%}
+				<p>{{ places }}</p>
+				{% endfor %}
+			</div>
+			<div id="userFacts">
+				<h4>Work</h4>
+				{% for job in profile.jobs.all %}
+				<p>{{job}}</p>
+				{% endfor %}
+			</div>
+			<div id="userFacts">
+				<h4>Past Attended:</h4>
+				<p>Lorem Ipsum</p>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<!-- 
 <h3>{{ profile.data }}</h3>
 <p>{{fb_data}}</p><br>
 <p><p>{{fb_friend_data}}</p></p><br>
 <p>{{fb_like_data}}</p><br>
 <p>{{fb_event_data}}</p><br>
-<p>{{matches}}</p>
+<p>{{matches}}</p> -->
 
 
 

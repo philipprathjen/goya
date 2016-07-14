@@ -1,0 +1,93 @@
+#userbar {
+	background-color:white;
+	width:100%;
+	margin-top: 5px;
+
+}
+
+#userinfo {
+	background-color:white;
+	width:100%;
+	margin-top: 5px;
+
+}
+
+#compOne{
+	position: relative;
+	height: 30%;
+	background-color:#0B66A1;
+	width:100%;
+	margin-top: 0px;
+}
+
+#profileImage{
+	position:relative;
+	top: 40px;
+	border-radius: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 70%;
+	border: 10px solid #ffffff;
+}
+#editProfile {
+	position: relative;
+	float: right;
+	top: -70%;
+}
+button {
+	height: 30px;
+	width: 70px;
+}
+
+#fbConnect{
+	position: relative;
+	float:right;
+}
+
+#userFacts{
+	position: relative;
+	background-color:white;
+	width:100%;
+	margin-top: 2px;
+	border: 3px solid black;
+	padding: 4px;
+
+}
+#contactTable{
+	width:90%;
+
+}
+th {
+    height: 50px;
+}
+
+#userBio{
+	position: relative;
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	top:15px;
+	color:white;
+
+}
+#bioTitle {
+	font-size: 20px;
+}
+
+#goyaScore {
+	position: relative;
+	height: 10%;
+	width: 100%;
+	background-color: #0B66A1;
+	opacity: 0.5;
+	bottom: -10%;
+	color:white;
+}
+#userMatch {
+	font-size: 20px;
+}
+
+#goyaImg {
+   -webkit-filter: invert(1);
+   filter: invert(1);
+}

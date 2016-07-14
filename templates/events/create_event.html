@@ -4,32 +4,102 @@
 
 
 {% block content %}
-<h1>Create an Event!</h1>
+
 
 <form action='success' method="post">{% csrf_token %}
+		<h1>Please specify the details of your Goya Party:</h1>
+		<!-- Hidden fields -->
 		<input type='hidden' name='creator' value='creator'>
-		<p>Event Name:<input type='' name='name' value='' placeholder='Anything you want here'></p><br>
 		<input type='hidden' name='slug' value=''>
-		Number of people: <input type='number' name='num_people' value='' placeholder='People there now?'><br>
-		Type of Event: <select name='event_type'>
-		  <option value="B">Bar</option>
-		  <option value="H">House Party</option>
-		  <option value="C">Clubbing</option>
-		  <option value="O">Other</option>
-		</select><br>
-
-		Location: <input type='text' name='location' value=''><br>
+		<input type='hidden' name='event_type' value="H">
 		<input type='hidden' name='lat' value=''>
 		<input type='hidden' name='lng' value=''>
-		People: <input type='number' name='max_invit' value='' placeholder='Invite how many?'><br>
-		Invite Girls: <input type='number' name='num_girl' value='' placeholder='Specify how many gals?'>
-		Invite Boys: <input type='number' name='num_boy' value='' placeholder='How many boys?'>
-		Choose the social proximity: <input type='number' name='sp_score_req' value=''><br>
-		Bring your own drinks?<input type='checkbox' name='byo' value='true'>
-		Should people bring cash?<input type='number' name='cash' value=''><br>
-		Anything else? <input type='text' name='other' value='' placeholder='Gryffindor Theme'>
 		<input type='hidden' name='active' value='true'>
-		<button type="submit" class="save btn btn-primary">Confirm</button>
+		
+		<div class="contentform">
+		<div class="leftcontact">
+			<div class="form-group">
+				<p>Goya Party Name<span>*</span></p>
+				<input type="text" name="name" id="nom" value='' data-rule="required" data-msg="Please choose an appropriate name for your Goya" placeholder='Your Goya Name'>
+			</div>
+			<div class="form-group">
+				<p>Total Guests<span>*</span></p>
+				<input type="number" name="num_people" id="xxx" value='' data-rule="required" placeholder='How many total guests?' data-msg="Please indicate how many guests you are planing to invite, including people not on Goya">
+			</div>
+			<div class="form-group">
+				<p>Where will the party be?<span>*</span></p>
+				<input type="text" name="location" id="xxx" value='' placeholder='Street Address' data-msg="Please indicate the address of the Goya party. People need to know.">
+			</div>
+			<div class="form-group">
+				<p>Set Date<span>*</span></p>
+				<input type="date" name="date" id="xxx" value='' data-rule="required" data-msg="Please indicate the date and time of the Goya Party.">
+			</div>
+			<div class="form-group">
+				<p>Set time<span>*</span></p>
+				<input type="time" name="time" id="xxx" value='' data-rule="required" data-msg="Please indicate the date and time of the Goya Party.">
+			</div>
+
+		</div>
+
+		<div class="rightcontact">	
+			<div class="form-group">
+			<p>How many Goya guests are welcome?<span>*</span></p>
+				<input type="number" name="max_invit" id="total_guests" data-rule="required" data-msg="Please indicate the number of Goya guests who are allowed to attend" placeholder='Invite how many?'/>
+			</div>
+			<div class="form-group">
+			<p>How many Girls are welcome?<span>*</span></p>
+				<input type="number" name="num_girl" onkeypress="checkInput()" oninput="checkInput()" id="girls" data-msg="Please indicate the number of Goya guests who are allowed to attend" placeholder='Invite how many?' />
+			</div>
+			<div class="form-group">
+			<p>How many Boys are welcome?<span>*</span></p>
+				<input type="number" name="num_boys" id="boys" onkeypress="checkInput()" oninput="checkInput()" data-msg="Please indicate the number of Goya guests who are allowed to attend" placeholder='Invite how many?'/>
+			</div>
+
+			<div class="form-group">
+			<p>Is your party BYO?<span>*
+				<input type="checkbox" name="byo" value='true' /></span>
+			</p>
+			</div>
+			<div class="form-group">
+			<p>Should Goya Guests Chip In (€)?<span>*
+				<input type="number" name="cash" value='' data-rule="required" placeholder='10'/></span>
+			</p>
+			</div>
+			</div>
+			<div class="form-group">
+			<p>Anything you want your guests to know? <span>*</span></p>
+                <textarea name="other" rows="14" placeholder='Goya Theme, Drink Requests, Dresscode, Plans for later'></textarea>
+            </div>
+		</div>
+		<div class='row'>
+			<center>
+			<button type="submit" id="btnCreateEvent"class="save btn btn-primary col-sm-12">Confirm</button>
+			</center>
+		</div>
 </form>
 
+<script type="text/javascript">
+
+function checkInput() {
+	var total = Number(document.getElementById("total_guests").value)+1;
+	var girls = Number(document.getElementById("girls").value);
+	var boys = Number(document.getElementById("boys").value);
+	totalSpec = girls + boys;
+
+
+	if (total <= totalSpec) {
+		document.getElementById("girls").style.backgroundColor = "red";
+		document.getElementById("boys").style.backgroundColor = "red";
+		document.getElementById("btnCreateEvent").disabled = true; 
+	}
+
+}
+</script>
+
+
+
+
+
+<!-- Taken from -->
+<!-- http://codepen.io/GrandvincentMarion/pen/KpmgOe/ -->
 {% endblock %}

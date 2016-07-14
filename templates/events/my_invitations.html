@@ -6,11 +6,15 @@
 {% block content %}
 <h1>Congratulations! You're invited: </h1><br>
 
-<ol>
+
+
 {% for event in events%}
-<h4><li>{{event}}</li></h4>
+<div class='jumbotron'>
+<h4>{{event}}</h4>
+</div>
 {% endfor %}
-</ol>
+
+
 
 <div>
 <footer class="footer">

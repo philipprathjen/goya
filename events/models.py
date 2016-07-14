@@ -24,10 +24,12 @@ class Event(models.Model):
 		('C', 'CLUBBING'),
 		('O', 'OTHER'),
 	)
-	event_type = models.CharField(max_length = 1, choices = EVENT_TYPES)
+	event_type = models.CharField(max_length = 1, choices = EVENT_TYPES, blank=True)
 	location = models.CharField(max_length = 250, unique = False)
 	lat = models.DecimalField(max_digits=9, decimal_places=6, default=0, blank = True)
 	lng = models.DecimalField(max_digits=9, decimal_places=6, default=0, blank = True)
+	event_time = models.DateTimeField(auto_now=False, auto_now_add=False, blank=False, null=True)
+	spirit_picture = models.ImageField(upload_to='static/img/spirit_pics/', null=True, blank = True)
 	
 	# Venue
 	venue = models.ManyToManyField(Venue, blank=True)
@@ -36,7 +38,7 @@ class Event(models.Model):
 	max_invit = models.IntegerField(blank = False)
 	num_girl = models.IntegerField(blank = True)
 	num_boy = models.IntegerField(blank = True)
-	sp_score_req = models.DecimalField(decimal_places=8, max_digits=16, default=0.00)
+	sp_score_req = models.DecimalField(decimal_places=8, max_digits=16, default=0.00, blank=True)
 	
 	# Bring along
 	byo = models.BooleanField(default = False)

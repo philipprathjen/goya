@@ -7,76 +7,71 @@
 <!-- <h1>Welcome back {{user}}</h1>
  -->
 <body>
-<div class='right-div'>
-<div class='' id="googleMap" style=""></div>
+<div class='banner-map'>
+	<div id="googleMap"></div>
 </div>
 
-<div id='filter_field' class='left-div'>
-	<div class='row' style='background-color: #ddd'>
-		<div class='col-sm-3'><p class='lead'>House Party</p><input type='checkbox'></div>
-		<div class='col-sm-3'><p class='lead'>Clubbing + VG</p><input type='checkbox'></div>
-		<div class='col-sm-3'><p class='lead'>Bar + VG</p><input type='checkbox'></div>
-		<div class='col-sm-3'><p class='lead'>Event + VG</p><input type='checkbox'></div>
-	</div>
-	<hr>
-	<p class='lead'>Entourage</p>
-	<div class='row'>
-		<div class='col-sm-3'><pre>Totally New</pre></div>
-		<div class='col-sm-6'>
-			<form>
-			<input type="range" id="myRange" value="90">
-			</form>
-		</div>
-		<div class='col-sm-3'>
-			<pre>Outer circle</pre></div>
-	</div>
+<!-- <div class='event-filter-banner'>
+<img src="{% static 'img/events/cocktail.jpg' %}">
+</div> -->
+<div class="event-filter-banner">
+	<form action='' method="get">
+		<input id='searchBar' type="text" name="location" id="xxx" value='' placeholder='Search Anywhere'>
+	</form>
+</div>
 </div>
 
-<div id='background_elements' class='container_low'><br>
+<div id='background_elements' class='container_low'>
+{% if active_events %}
+	{% for event in active_events %}
+	  <div class=' col-sm-4 col-md-3'>
+	    <div class="panel">
 
-	{% if active_events %}
-	<ul>
-		{% for event in active_events %}
-		<div id='element' class='row'>
-			<div class='col-sm-8'>
+	      <div class="front card" >
+	      <img src="{% static event.spirit_picture.url %}" width="100%" height="100%" style="position:absolute; z-index:-1; border-radius:2%; opacity:0.8";>
+
+
+			<center>
+				<h4 style='color:white'>#{{ event.name }}</h4>
+			</center>
+
+	      </div> 
+	      <div class="back card">
 				<h4>{{ event.name }}</h4>
-				<p>Bring your own: {{event.byo}}</p>
-				<p>Location: {{event.location}}</p>
-			</div>
-			<div class='col-sm-4'><br><br>
-				<form action='' method="post">{% csrf_token %}
-					<input type='hidden' name='id' value='{{event.id}}'>
-					<input type='hidden' name='name' value='{{event}}'>
-					<input type='hidden' name='guest' value='{{user}}'>
-					<button type="submit" class="save btn-success">Request Attendance</button>
-				</form>
-			</div>
-		</div><br>
-		{% endfor %}
-	</ul>
-	{% else %}
-		<h3>Nothing going on right now. Start something yourself!</h3>
-		<p class='lead'>Learn how</p>
-	{% endif %}
 
+				<h4>{{ event.creator }}</h4>
+				<p>Bring your own: {{event.byo}}</p>
+				<p>Chip In: {{event.cash}}€</p>
+				<p>Distance: {{event.location}}</p>
+		    <form action='' method="post">{% csrf_token %}
+				<input type='hidden' name='id' value='{{event.id}}'>
+				<input type='hidden' name='name' value='{{event}}'>
+				<input type='hidden' name='guest' value='{{user}}'>
+				<button id="btnRequest" class='btn btn-primary' style='width:100%'>Request Attendance</button>
+			</form>
+	      </div>  
+	    </div>
+	    <div>
+		</div>
+	  </div>
+	{% endfor %}
+{% else %}
+	<h3>Nothing going on right now. Start something yourself!</h3>
+	<p class='lead'>Learn how</p>
+{% endif %}
 </div>
-<div>
-<footer class="footer footer_dash">
+
+
+
+
+
+<footer class="footer footer_dash" style='z-index:3'>
 	<div class="container">
  	<p class='lead'>You are logged in as: {{user}}</p>
 	</div>
 </footer>
-</div>
-
 
 {% endblock %}
 </body>
-<style>
-{%block style %}
-body{
-	background-color: black;
-}
 
 
-{% endblock %}
-</style>

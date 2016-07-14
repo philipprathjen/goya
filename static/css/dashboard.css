@@ -1,0 +1,152 @@
+#element {
+    width: 100%;
+    height: 15%;
+    background-color: black;
+    z-index: 1;
+    margin-top: 1%;
+    border-radius: 15px;
+    border-width: 1px;
+    border-style: solid;
+    color:white;
+    font: sans-serif;
+}
+#background_elements{
+    width: 100%;
+    height: 100%;
+    margin-top: 1%;
+}
+
+#googleMap{
+  width: 100%;  
+  height: 100%;
+  position: absolute;
+}
+
+.banner-map{
+  position: absolute;
+  height: 55%;
+  width: 100% !important;
+  top: 7%;
+  left:0;
+}
+
+/* Next section */
+.event-filter-banner{
+    width: 100%;
+    height: 7%;
+    background-color: #ffffff;
+    position:absolute;
+    top: 62%;
+    left:0%;
+}
+#searchBar{
+  float:left;
+  width: 100%;
+  padding-left: 2%;
+  height: 50px;
+  background-color: lightgrey;
+}
+
+.container_low{
+    position: absolute;
+    left: 0;
+    top: 70%;
+}
+
+input[type=text] {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color:rgba(0, 0, 0, 0);
+    background-image: url('searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+    width: 100%;
+}
+
+
+/*Element Display Formatting*/
+
+  .panel {
+    width: 100%;
+    height: 35%;
+    margin: auto;
+    position: relative;
+  }
+
+  .card {
+      width: 100%;
+      height: 100%;
+      -o-transition: all 1.1s;
+      -ms-transition: all 1.1s;
+      -moz-transition: all 1.1s;
+      -webkit-transition: all 1.1s;
+      transition: all .9s;
+      -webkit-backface-visibility: hidden;
+      -ms-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      backface-visibility: hidden;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      display: inline;
+
+  }
+  .card h3 {
+  font-size: 18px;
+  background: #add8e6 none repeat scroll 0% 0%;
+  color: rgb(255, 255, 255);
+  padding: 22px 25px;
+  border-radius: 5px 5px 0px 0px;
+  margin: auto;
+  text-shadow: none; 
+  text-align:left
+}
+
+  .front {
+      z-index: 2;
+      background-color: white;
+      border-color: black;
+      border-radius: 5px 5px 0px 0px;
+      color:black;
+  }
+
+  .back {
+      z-index: 1;
+      -webkit-transform: rotateY(-180deg);
+      -ms-transform: rotateY(-180deg);
+      -moz-transform: rotateY(-180deg);  
+      transform: rotateY(-180deg);  
+      background-color: white;
+      outline-color: black;
+      border-radius: 5px 5px 0px 0px;
+  }
+
+  .panel:hover .front {
+      z-index: 1;
+      -webkit-transform: rotateY(180deg);
+      -ms-transform: rotateY(180deg);
+      -moz-transform: rotateY(180deg);
+      transform: rotateY(180deg);
+  }
+
+  .panel:hover .back {
+      z-index: 2;   
+      -webkit-transform: rotateY(0deg);
+      -ms-transform: rotateY(0deg);
+      -moz-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+  }
+
+#btnRequest{
+  position: relative;
+  height: 20%;
+
+}

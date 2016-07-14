@@ -12,6 +12,7 @@ User = get_user_model()
 # Event Models and Forms 
 from .models import Event, EventGroup, EventRequest
 from .forms import EventForm, AttendForm
+from venues.models import Venue
 
 # Geolocation
 from geopy import geocoders
@@ -24,7 +25,11 @@ def my_events(request):
 		event_id = request.POST['id']
 		event_name = request.POST['name']
 		guest = request.POST['guest']
-		if attend_form.is_valid:
+		try:
+			decline = request.POST['decline']
+		except:
+			decline = None
+		if attend_form.is_valid and not decline:
 			try: 
 				event = Event.objects.filter(id=event_id)[0]
 				exist = EventGroup.objects.filter(event=event)
@@ -38,15 +43,15 @@ def my_events(request):
 				#attend_conf.guests = User.objects.filter(username=user)			
 				user_attend = User.objects.filter(username=guest)[0]
 				attend_conf.guests.add(user_attend)
-
 			else: 
 				group = exist[0]
 				user_attend = User.objects.filter(username=guest)[0]
-				group.guests.add(user_attend)
-			
+				group.guests.add(user_attend)			
 			EventRequest.objects.filter(event=event, guest=user_attend).delete()
-	
-
+		if attend_form.is_valid and decline:
+			event = Event.objects.filter(id=event_id)[0]
+			user_attend = User.objects.filter(username=guest)[0]
+			EventRequest.objects.filter(event=event, guest=user_attend).delete()
 	active_events = Event.objects.filter(active=True, creator=user)
 	qs = EventGroup.objects.filter(event=active_events)
 	try: 
@@ -54,9 +59,7 @@ def my_events(request):
 		url = instance.get_absolute_url()
 	except:
 		pass
-
 	attend_form = AttendForm()
-	
 	my_guests = {}
 	for instance in active_events:
 		try:
@@ -100,8 +103,11 @@ def my_invitations(request):
 	event_invitations = EventGroup.objects.all()
 	qs_events=[]
 	for event in event_invitations:
-		elem= Event.objects.filter(eventgroup=event)[0]
-		qs_events.append(elem)
+		try:
+			elem= Event.objects.filter(eventgroup=event, active=True)[0]
+			qs_events.append(elem)
+		except:
+			pass
 	events=[]
 	for i in range(0,len(qs_events)):
 		instance = qs_events[i]
@@ -126,9 +132,18 @@ def new_event(request):
 	user_data = {'creator': request.user}
 	creator = request.user
 	new_event_form=EventForm(user_data)
+	venues = Venue.objects.all()
+	venue_dict = {}
+	create_css = True
+	for venue in venues:
+		venue_dict[venue.id]=venue.name
+	print(venue_dict)
 	context = {
+	'venues': venues,
+	'venue_dict': venue_dict,
 	'creator': creator, 
 	'new_event_form': new_event_form,
+	'create_css': create_css,
 	}
 	return render(request, "events/create_event.html", context)
 
@@ -139,7 +154,14 @@ def create_success(request):
 		name = request.POST['name']
 		slug = request.POST['slug']
 		num_people = request.POST['num_people']
-		event_type = request.POST['event_type']
+		date = request.POST['date']
+		time = request.POST['time']
+		print(date, time)
+		datetime = str(date) + ' ' + str(time)
+		try:
+			event_type = request.POST['event_type']
+		except:
+			event_type = 'H'
 		location_entry = str(request.POST['location'])
 		try:
 			geolocator = geocoders.GoogleV3()
@@ -147,10 +169,20 @@ def create_success(request):
 		except:
 			location = request.POST['location']
 		max_invit = request.POST['max_invit']
-		num_girl = request.POST['num_girl']
-		num_boy = request.POST['num_boy']
-		sp_score_req = request.POST['sp_score_req']
-		byo = request.POST['byo']
+		try:
+			num_girl = request.POST['num_girl']
+			num_boy = request.POST['num_boy']
+			sp_score_req = request.POST['sp_score_req']
+		except:
+			num_girl = 0
+			num_boy = 0
+			sp_score_req = 0
+		try:
+			byo = request.POST['byo']
+			print(byo)
+		except:
+			byo=False
+			print(byo)
 		cash = request.POST['cash']
 		other = request.POST['other']
 		active = request.POST['active']
@@ -170,6 +202,12 @@ def create_success(request):
 			event.cash = cash
 			event.other = other
 			event.active = active
+			event.event_time = datetime
+			try: 
+				#### getting the picture
+				event.spirit_picture = picturefromhtml
+			except:
+				event.spirit_picture = "/media/static/img/spirit_pics/cocktail.jpg"
 			try:
 				event.lat = lat
 				event.lng = lng
@@ -185,6 +223,7 @@ def create_success(request):
 
 		return render(request, "events/create_success.html", context)
 	else:
+		
 		return render(request, "events/create_failure.html", context)
 
 def events_detail(request, slug=None):

@@ -9,7 +9,7 @@
 </div>
 <!-- This is just example code -->
 <div class='row'>
-	<div>
+	<div class='jumbotron'>
 	{% for key, value in my_guests.items %}
 	<h3>Party name: {{key.name}}</h3><hr>
 		<div class='row'>
@@ -21,6 +21,7 @@
 			</div>
 		<div class='row'>
 		{% for guest in value.requests %}
+		
 			<div class='col-sm-3'>
 				<center>
 				{% if guest.picture %}
@@ -38,6 +39,13 @@
 					<input type='hidden' name='guest' value='{{guest}}'>
 					<button type="submit" class="save btn btn-primary">Confirm</button>
 				</form>
+				<form action='' method="post">{% csrf_token %}
+					<input type='hidden' name='id' value='{{key.id}}'>
+					<input type='hidden' name='name' value='{{key}}'>
+					<input type='hidden' name='guest' value='{{guest}}'>
+					<input type='hidden' name='decline' value='1'>
+					<button type="submit" class="save btn btn-danger">Decline</button>
+				</form>	
 			</div>
 		{% endfor %}
 		{% if not value.requests %}
